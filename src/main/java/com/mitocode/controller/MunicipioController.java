@@ -47,6 +47,25 @@ public class MunicipioController {
         return new ResponseEntity<>(dtoResponse, HttpStatus.OK);
     }
 
+    @GetMapping("/findByDepartamentoId/{departamentoid}")
+    public ResponseEntity<List<MunicipioDTO>> findByDepartamentoId(@PathVariable("departamentoid") Integer departamentoId) {
+        List<Municipio> allMunicipios = service.findAll(); // Obtener todos los municipios
+
+        List<Municipio> filteredMunicipios = allMunicipios.stream()
+                .filter(municipio -> municipio.getDepartamento().getDepartamentoId().equals(departamentoId))
+                .collect(Collectors.toList());
+
+        if (filteredMunicipios.isEmpty()) {
+            throw new ModelNotFoundException("No se encontraron municipios para el departamento con ID: " + departamentoId);
+        }
+
+        List<MunicipioDTO> dtoResponseList = filteredMunicipios.stream()
+                .map(obj -> mapper.map(obj, MunicipioDTO.class))
+                .collect(Collectors.toList());
+
+        return new ResponseEntity<>(dtoResponseList, HttpStatus.OK);
+    }
+
 
 
     @PostMapping
