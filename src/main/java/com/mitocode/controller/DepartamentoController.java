@@ -46,7 +46,10 @@ public class DepartamentoController {
         }
         DepartamentoDTO dtoResponse = mapper.map(obj, DepartamentoDTO.class);
         return new ResponseEntity<>(dtoResponse, HttpStatus.OK);
+
+
     }
+
 
     @PostMapping
     public ResponseEntity<Void> save(@Valid @RequestBody DepartamentoDTO dto) {
