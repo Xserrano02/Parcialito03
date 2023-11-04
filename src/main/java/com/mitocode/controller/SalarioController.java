@@ -66,6 +66,41 @@ public class SalarioController {
 //        return ResponseEntity.created(location).build();
 //    }
 
+    @PostMapping
+    public ResponseEntity<SalarioDTO> save(@Valid @RequestBody SalarioDTO dto) {
+
+        double salarioLiquido = calcularSalarioLiquido(dto.getSalarioBruto());
+        dto.setSalarioLiquido(salarioLiquido);
+
+        Salario p = service.save(mapper.map(dto, Salario.class));
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(p.getSalarioId())
+                .toUri();
+
+        // Retornar el DTO actualizado con el salario líquido
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    private double calcularSalarioLiquido(double salarioBruto) {
+        // Aquí deberías implementar la lógica de cálculo de deducciones
+        // Por ejemplo:
+        double ISSS = 0.03;
+        double AFP = 0.0725;
+        double impuestoTotal = ISSS + AFP;
+        double salario = salarioBruto;
+        double salarioLiquido = salario - (impuestoTotal*salario);
+
+
+
+//        double impuestos = salarioBruto * 0.15; // 15% de impuestos
+//        double seguridadSocial = salarioBruto * 0.05; // 5% para la seguridad social
+//        double deduccionesTotales = impuestos + seguridadSocial;
+        return salarioLiquido;
+    }
+
+
+
 
     @PutMapping
     public ResponseEntity<Salario> update(@Valid @RequestBody SalarioDTO dto) {
