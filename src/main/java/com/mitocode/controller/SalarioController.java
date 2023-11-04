@@ -90,7 +90,7 @@ public class SalarioController {
         double impuestoTotal = ISSS + AFP;
         double salario = salarioBruto;
         double salarioLiquido = salario - (impuestoTotal*salario);
-
+//.
 
 
 //        double impuestos = salarioBruto * 0.15; // 15% de impuestos
